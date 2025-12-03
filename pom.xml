@@ -13,38 +13,35 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
     <dependencies>
-        <!--
-            Sección donde se declaran todas las dependencias que el proyecto necesita
-            para compilar y ejecutarse. Maven se encargará de descargarlas desde el
-            repositorio central y añadirlas al classpath automáticamente.
-        -->
         <dependency>
-            <!--
-                groupId:
-                Identificador del grupo o fabricante de la librería.
-                'org.postgresql' es el grupo oficial del driver JDBC de PostgreSQL.
-            -->
             <groupId>org.postgresql</groupId>
-
-            <!--
-                artifactId:
-                Nombre concreto del artefacto (librería) dentro del grupo.
-                En este caso, 'postgresql' es el driver JDBC que permite al
-                programa Java comunicarse con bases de datos PostgreSQL.
-            -->
             <artifactId>postgresql</artifactId>
-
-            <!--
-                version:
-                Versión específica del driver JDBC que queremos usar.
-                Maven descargará exactamente la versión 42.7.4 desde Maven Central.
-                Es importante mantener este número actualizado para corregir bugs
-                y mejorar compatibilidad con nuevas versiones del servidor PostgreSQL.
-            -->
             <version>42.7.4</version>
         </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>22.0.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-fxml</artifactId>
+            <version>22.0.2</version>
+        </dependency>
     </dependencies>
-
-
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-maven-plugin</artifactId>
+                <version>0.0.8</version>
+                <configuration>
+                    <mainClass>app.LampreasVioletaApp</mainClass>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
