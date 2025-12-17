@@ -1,7 +1,6 @@
 package app;
 
 import dao.ClienteDAO;
-import dao.DetalleClienteDAO;
 import model.Cliente;
 
 import javafx.collections.FXCollections;
@@ -12,14 +11,20 @@ import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import model.DetalleCliente;
-import services.ClienteDetalle;
 
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
+
+import dao.ClienteDAO;
+import model.Cliente;
+import model.DetalleCliente;
+import services.ClienteDetalle;
+import dao.DetalleClienteDAO;
+import model.DetalleCliente;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Vista JavaFX para gestionar clientes.
@@ -39,15 +44,20 @@ import java.util.stream.Collectors;
 public class ClientesView {
 
     private final BorderPane root = new BorderPane();
+    private final ClienteDAO clienteDAO = new ClienteDAO();
+
+
+    private final ClienteDetalle clienteService = new ClienteDetalle();
+    private final DetalleClienteDAO detalleClienteDAO = new DetalleClienteDAO();
+
+    // Caché en memoria: idCliente -> detalle
+    private final Map<Integer, DetalleCliente> cacheDetalles = new HashMap<>();
+
 
     // Tabla y datos
     private final TableView<Cliente> tabla = new TableView<>();
     private final ObservableList<Cliente> datos = FXCollections.observableArrayList();
 
-    private final DetalleClienteDAO detalleClienteDAO = new DetalleClienteDAO();
-
-    // Caché en memoria: idCliente -> detalle
-    private final Map<Integer, DetalleCliente> cacheDetalles = new HashMap<>();
     // Campos de formulario (Cliente)
     private final TextField txtId = new TextField();
     private final TextField txtNombre = new TextField();
@@ -69,9 +79,7 @@ public class ClientesView {
     private final Button    btnBuscar          = new Button("Buscar");
     private final Button    btnLimpiarBusqueda = new Button("Limpiar");
 
-    // DAO (acceso a BD)
-    private final ClienteDAO clienteDAO = new ClienteDAO();
-    private final ClienteDetalle clienteService = new ClienteDetalle();
+
 
     public ClientesView() {
         configurarTabla();
@@ -129,6 +137,7 @@ public class ClientesView {
 
         root.setCenter(tabla);
     }
+
     private void configurarFormulario() {
         GridPane form = new GridPane();
         form.setPadding(new Insets(10));
@@ -245,7 +254,6 @@ public class ClientesView {
     }
 
 
-
     /**
      * Búsqueda de momento hecha EN MEMORIA.
      *
@@ -357,13 +365,13 @@ public class ClientesView {
             Cliente existente = clienteDAO.findById(id);
 
             if (existente == null) {
-
+                // 👉 NO existe → INSERT de cliente + detalle en UNA transacción
                 clienteService.guardarClienteCompleto(c, d);
 
                 mostrarInfo("Insertado",
-                        "Cliente y detalle creados (sin transacción).");
+                        "Cliente y detalle creados correctamente.");
             } else {
-
+                // 👉 SÍ existe → aquí irá en el futuro el UPDATE
                 mostrarAlerta("Actualizar pendiente",
                         "El cliente ya existe.\n" +
                                 "Más adelante aquí haremos UPDATE desde el Service.");
@@ -376,6 +384,8 @@ public class ClientesView {
             mostrarError("Error al guardar cliente y detalle", e);
         }
     }
+
+
 
     /**
      * Borrar cliente seleccionado.
@@ -411,7 +421,21 @@ public class ClientesView {
                 "Aún no existe deleteById en ClienteDAO.\n" +
                         "Cuando lo implementemos, aquí se llamará al método.");
 
-
+        // Ejemplo futuro:
+        /*
+        try {
+            int borradas = clienteDAO.deleteById(sel.getId());
+            if (borradas > 0) {
+                mostrarInfo("Borrado", "Cliente eliminado.");
+                recargarDatos();
+                limpiarFormulario();
+            } else {
+                mostrarAlerta("No borrado", "No se encontró el cliente en la BD.");
+            }
+        } catch (SQLException e) {
+            mostrarError("Error al borrar cliente", e);
+        }
+        */
     }
 
     /* =========================================================

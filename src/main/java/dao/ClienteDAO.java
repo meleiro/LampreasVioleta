@@ -71,29 +71,26 @@ public class ClienteDAO {
             ps.executeUpdate();
             // Ejecuta la sentencia. Como es un INSERT, no devuelve ResultSet.
 
+            // Recuperar el ID generado por PostgreSQL
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) {
+                    int idGenerado = rs.getInt(1);
+                    c.setId(idGenerado);  // lo guardamos en el objeto
+                }
+            }
+
         }
     }
 
+    // Versión transaccional: usa una conexión que le pasa el servicio
     public void insert(Cliente c, Connection con) throws SQLException {
-        // Método público que inserta un cliente en la base de datos.
-        // Recibe un objeto Cliente y lanza SQLException si algo sale mal.
-
         try (PreparedStatement ps = con.prepareStatement(INSERT_SQL)) {
-
-            // try-with-resources: la conexión y el PreparedStatement se cerrarán automáticamente
-            // al final del bloque, aunque haya errores.
-
-            ps.setInt(1, c.getId());         // Parámetro 1 → columna id
-            ps.setString(2, c.getNombre());  // Parámetro 2 → columna nombre
-            ps.setString(3, c.getEmail());   // Parámetro 3 → columna email
+            ps.setInt(1, c.getId());
+            ps.setString(2, c.getNombre());
+            ps.setString(3, c.getEmail());
             ps.executeUpdate();
-            // Ejecuta la sentencia. Como es un INSERT, no devuelve ResultSet.
-
         }
     }
-
-
-
 
     // ----------------------------------------------------------
     // MÉTODO: BUSCAR CLIENTE POR ID
