@@ -19,7 +19,7 @@ public class DetallePedidoDAO {
 
     private static final String INSERT_SQL =
             """
-            INSERT INTO lampreadb.detalle_pedido
+            INSERT INTO ldetalle_pedido
             (pedido_id, producto_id, cantidad, precio_unit)
             VALUES (?, ?, ?, ?)
             """;
@@ -27,14 +27,14 @@ public class DetallePedidoDAO {
     private static final String SELECT_ALL_SQL =
             """
             SELECT pedido_id, producto_id, cantidad, precio_unit
-            FROM lampreadb.detalle_pedido
+            FROM detalle_pedido
             ORDER BY pedido_id, producto_id
             """;
 
     private static final String SELECT_BY_PEDIDO_SQL =
             """
             SELECT pedido_id, producto_id, cantidad, precio_unit
-            FROM lampreadb.detalle_pedido
+            FROM detalle_pedido
             WHERE pedido_id = ?
             ORDER BY producto_id
             """;

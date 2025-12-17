@@ -19,13 +19,13 @@ public class PedidoDAO {
     // ===============================
 
     private static final String INSERT_SQL =
-            "INSERT INTO lampreadb.pedido (id, cliente_id, fecha) VALUES (?, ?, ?)";
+            "INSERT INTO pedido (id, cliente_id, fecha) VALUES (?, ?, ?)";
 
     private static final String SELECT_BY_ID_SQL =
-            "SELECT id, cliente_id, fecha FROM lampreadb.pedido WHERE id = ?";
+            "SELECT id, cliente_id, fecha FROM lpedido WHERE id = ?";
 
     private static final String SELECT_ALL_SQL =
-            "SELECT id, cliente_id, fecha FROM lampreadb.pedido ORDER BY id";
+            "SELECT id, cliente_id, fecha FROM pedido ORDER BY id";
 
     // ===============================
     // CRUD BÁSICO

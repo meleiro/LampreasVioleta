@@ -18,13 +18,13 @@ public class ProductoDAO {
     // ===============================
 
     private static final String INSERT_SQL =
-            "INSERT INTO lampreadb.producto (id, nombre, precio) VALUES (?, ?, ?)";
+            "INSERT INTO producto (id, nombre, precio) VALUES (?, ?, ?)";
 
     private static final String SELECT_BY_ID_SQL =
-            "SELECT id, nombre, precio FROM lampreadb.producto WHERE id = ?";
+            "SELECT id, nombre, precio FROM producto WHERE id = ?";
 
     private static final String SELECT_ALL_SQL =
-            "SELECT id, nombre, precio FROM lampreadb.producto ORDER BY id";
+            "SELECT id, nombre, precio FROM producto ORDER BY id";
 
     // ===============================
     // CRUD BÁSICO
